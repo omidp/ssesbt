@@ -1,0 +1,33 @@
+<html>
+<head>
+
+</head>
+<body>
+
+<script>
+const eventSource = new EventSource('http://localhost:8080/sse/connect?userId=123');
+eventSource.addEventListener("message", (event) => {
+	   const message = JSON.parse(event.data);
+	   console.log(message); 
+	});
+	
+eventSource.addEventListener("customEventName", (event)=> {
+	   console.log("Message id is " + event.lastEventId);
+	});
+
+eventSource.addEventListener("open", (event) => {
+   console.log('connection is live');
+});
+
+eventSource.addEventListener("error", (event) => {
+   if (event.readyState == EventSource.CLOSED) {
+      console.log('connection is closed');
+   } else {
+      console.log("Error occured", event);
+   }
+   event.target.close();
+});	
+</script>
+
+</body>
+</html>
